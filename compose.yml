@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: docflow-db
+    restart: always
+    environment:
+      - POSTGRES_USER=docflow
+      - POSTGRES_PASSWORD=documentpass
+      - POSTGRES_DB=docflow_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: docflow-mail
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  postgres_data:
