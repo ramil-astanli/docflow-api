@@ -1,8 +1,8 @@
 package com.ramilastanli.docflow.security.controller;
 
-import com.ramilastanli.docflow.entity.Role;
+import com.ramilastanli.docflow.core.entity.enums.Role;
 import com.ramilastanli.docflow.security.service.AuthService;
-import com.ramilastanli.docflow.security.util.SecurityUtils;
+import com.ramilastanli.docflow.common.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +16,7 @@ public class AdminController {
     private final AuthService authService;
 
     @PatchMapping("/users/{userId}/role")
-    @PreAuthorize("hasRole('ADMIN')") // Metod səviyyəsində təhlükəsizlik
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateRole(
             @PathVariable Long userId,
             @RequestParam Role role) {

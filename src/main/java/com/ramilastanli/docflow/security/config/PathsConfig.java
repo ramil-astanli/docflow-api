@@ -10,8 +10,8 @@ public class PathsConfig {
     @Bean(name = "publicPaths")
     public List<String> publicPaths() {
         return List.of(
-                "/api/auth/**",           // Login və Register endpointləri
-                "/swagger-ui/**",         // API sənədləşməsi
+                "/api/auth/**",
+                "/swagger-ui/**",
                 "/v3/api-docs/**"
         );
     }
@@ -19,16 +19,16 @@ public class PathsConfig {
     @Bean(name = "securedPaths")
     public List<String> securedPaths() {
         return List.of(
-                "/api/documents/**",      // Sənəd yükləmə və siyahılama
-                "/api/approvals/**"       // Təsdiq/İmtina əməliyyatları
+                "/api/documents/**",
+                "/api/approvals/**"
         );
     }
 
     @Bean(name = "adminPaths")
     public List<String> adminPaths() {
         return List.of(
-                "/api/admin/**",          // Admin paneli
-                "/api/audit-logs/**"      // Audit tarixçəsinə baxış
+                "/api/admin/**",
+                "/api/audit-logs/**"
         );
     }
 }

@@ -1,7 +1,7 @@
 package com.ramilastanli.docflow.security.filter;
 
-import com.ramilastanli.docflow.config.ApplicationConstants;
-import com.ramilastanli.docflow.entity.Role;
+import com.ramilastanli.docflow.common.util.ApplicationConstants;
+import com.ramilastanli.docflow.core.entity.enums.Role;
 import com.ramilastanli.docflow.security.user.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,8 +44,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                 Environment env = getEnvironment();
 
                 if (null != env) {
-                    String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
-                            ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
+                    String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY);
                     SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
                     Claims claims = Jwts.parserBuilder()
@@ -55,13 +54,12 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                             .getBody();
 
                     String email = String.valueOf(claims.get("email"));
-                    String rolesStr = String.valueOf(claims.get("roles")); // Məsələn: "ROLE_ADMIN"
+                    String rolesStr = String.valueOf(claims.get("roles"));
                     Long id = Long.valueOf(String.valueOf(claims.get("id")));
 
                     String cleanerRole = rolesStr.replace("ROLE_", "");
                     Role roleEnum = Role.valueOf(cleanerRole);
 
-                    // 3. CustomUserDetails konstruktorunu 5 arqumentlə çağırırıq
                     CustomUserDetails userDetails = new CustomUserDetails(
                             id,
                             email,
@@ -70,7 +68,6 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                             AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStr)
                     );
 
-                    // 4. Authentication obyektini yaradırıq
                     Authentication authentication = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
@@ -99,13 +96,12 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath(); // URI yerinə ServletPath daha etibarlıdır
+        String path = request.getServletPath();
 
         if (path.startsWith("/ws-notifications")) {
             return true;
         }
 
-        // Siyahıdakı yollarla uyğunluğu yoxlayırıq
         return publicPaths.stream().anyMatch(p -> pathMatcher.match(p, path));
     }
 }

@@ -1,8 +1,8 @@
 package com.ramilastanli.docflow.security.initializer;
 
-import com.ramilastanli.docflow.entity.Role;
-import com.ramilastanli.docflow.entity.User;
-import com.ramilastanli.docflow.repository.UserRepository;
+import com.ramilastanli.docflow.core.entity.enums.Role;
+import com.ramilastanli.docflow.core.entity.User;
+import com.ramilastanli.docflow.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,16 +17,13 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Sistemdə adminin olub-olmadığını yoxlayırıq
         String adminEmail = "admin@docflow.com";
 
         if (userRepository.findByEmail(adminEmail).isEmpty()) {
             User admin = new User();
             admin.setUsername("superadmin");
             admin.setEmail(adminEmail);
-            // Şifrəni mütləq encode edib saxlamalıyıq
             admin.setPassword(passwordEncoder.encode("admin123"));
-            // Rolu birbaşa ADMIN olaraq set edirik
             admin.setRole(Role.ADMIN);
 
             userRepository.save(admin);

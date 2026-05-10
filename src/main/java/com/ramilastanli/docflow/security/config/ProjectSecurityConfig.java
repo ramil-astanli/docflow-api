@@ -44,40 +44,44 @@ public class ProjectSecurityConfig {
     SecurityFilterChain customSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .csrf(csrf -> csrf.disable())
                 .cors(corsConfig -> corsConfig.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(requests -> {
-                    requests.requestMatchers("/ws-notifications/**").permitAll();
 
-                    // Siyahıları tətbiq etməzdən əvvəl yolların boş olmadığını yoxlayın
+                .authorizeHttpRequests(requests -> {
+                    requests.requestMatchers("/ws/**").permitAll();
+
                     if (publicPaths != null) {
                         publicPaths.forEach(path -> requests.requestMatchers(path).permitAll());
                     }
+
                     if (adminPaths != null) {
                         adminPaths.forEach(path -> requests.requestMatchers(path).hasRole("ADMIN"));
                     }
+
                     if (securedPaths != null) {
                         securedPaths.forEach(path -> requests.requestMatchers(path).hasAnyRole("USER", "APPROVER", "ADMIN"));
                     }
 
-                    // denyAll() yerinə authenticated() istifadə etmək daha təhlükəsizdir
-                    // Çünki public olanlar onsuz da yuxarıda permitAll() alıb.
                     requests.anyRequest().authenticated();
                 })
-                // Filtrin əlavə edilməsi
+
                 .addFilterBefore(new JwtTokenValidatorFilter(publicPaths), BasicAuthenticationFilter.class)
                 .formLogin(flc -> flc.disable())
                 .httpBasic(hbc -> hbc.disable())
+
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setStatus(403);
                             response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("{\"error\": \"Giriş Qadağandır\", \"message\": \"Bu sənəd əməliyyatı üçün yetkiniz yoxdur: " + request.getRequestURI() + "\"}");
+                            response.getWriter().write(String.format(
+                                    "{\"error\": \"Giriş Qadağandır\", \"message\": \"Yetkiniz yoxdur: %s\"}",
+                                    request.getRequestURI()
+                            ));
                         })
                 )
                 .build();
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

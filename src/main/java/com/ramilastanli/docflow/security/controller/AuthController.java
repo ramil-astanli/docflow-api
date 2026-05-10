@@ -1,9 +1,9 @@
 package com.ramilastanli.docflow.security.controller;
 
 import com.ramilastanli.docflow.security.service.AuthService;
-import com.ramilastanli.docflow.security.dto.request.LoginRequestDto;
-import com.ramilastanli.docflow.security.dto.response.LoginResponseDto;
-import com.ramilastanli.docflow.security.dto.request.RegisterRequestDto;
+import com.ramilastanli.docflow.core.dto.request.LoginRequestDto;
+import com.ramilastanli.docflow.core.dto.response.LoginResponseDto;
+import com.ramilastanli.docflow.core.dto.request.RegisterRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

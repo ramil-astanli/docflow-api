@@ -1,6 +1,6 @@
 package com.ramilastanli.docflow.security.user;
 
-import com.ramilastanli.docflow.entity.Role;
+import com.ramilastanli.docflow.core.entity.enums.Role;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public String getUsername() { return email; } // DocFlow-da identifikasiya email ilədir
+    public String getUsername() { return email; }
 
     @Override
     public String getPassword() { return password; }

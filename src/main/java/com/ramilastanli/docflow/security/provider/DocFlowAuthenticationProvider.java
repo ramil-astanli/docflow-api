@@ -1,7 +1,7 @@
 package com.ramilastanli.docflow.security.provider;
 
-import com.ramilastanli.docflow.entity.User;
-import com.ramilastanli.docflow.repository.UserRepository;
+import com.ramilastanli.docflow.core.entity.User;
+import com.ramilastanli.docflow.core.repository.UserRepository;
 import com.ramilastanli.docflow.security.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,7 +32,6 @@ public class DocFlowAuthenticationProvider implements AuthenticationProvider {
                 .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı: " + email));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
-            // Role adının qarşısına ROLE_ prefiksini avtomatik əlavə edirik
             List<SimpleGrantedAuthority> authorities = List.of(
                     new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
