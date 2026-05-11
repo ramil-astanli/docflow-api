@@ -8,7 +8,7 @@ services:
       - POSTGRES_PASSWORD=documentpass
       - POSTGRES_DB=docflow_db
     ports:
-      - "5434:5432" # Çöldən 5434 ilə bağlanacaqsan
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -17,17 +17,16 @@ services:
     container_name: docflow-mail
     restart: always
     ports:
-      - "1025:1025" # SMTP port
-      - "8025:8025" # Web UI (Mailləri görmək üçün)
+      - "1025:1025"
+      - "8025:8025"
 
-  # SƏNİN TƏTBİQİN (Bunu əlavə etməlisən)
   app:
     build: .
     container_name: docflow-api
     env_file:
       - .env
     ports:
-      - "8080:8080" # Həm REST, həm də WebSocket bu portla işləyəcək
+      - "8080:8080"
     depends_on:
       - db
       - mailhog
@@ -38,7 +37,7 @@ services:
       - SPRING_MAIL_HOST=mailhog
       - SPRING_MAIL_PORT=1025
     volumes:
-      - ./uploads:/app/uploads # Sənədlərin fiziki saxlanması üçün
+      - ./uploads:/app/uploads
 
 volumes:
   postgres_data:
